@@ -5,6 +5,7 @@
 			<img class="banner_image" :src="item.img" />
 		</van-swipe-item>
 	</van-swipe>
+	<CategoryGrid :grid="grid" />
 	<SpuScroll :theme="themeE" :spu-list="themeESpu" />
 </template>
 
@@ -13,10 +14,13 @@
 	import {Theme} from "../../../models/Theme"
 	import {Banner} from '../../../models/Banner'
 	import SpuScroll from '../../components/spu-scroll'
+	import {Category} from "../../../models/Category"
+	import CategoryGrid from '../../components/category-grid'
 	export default {
 		name: "home",
 		components: {
-			SpuScroll
+			SpuScroll,
+			CategoryGrid
 		},
 		setup() {
 			let state = reactive({
@@ -24,6 +28,7 @@
 				themeE: {},
 				themeESpu: [],
 				bannerB: [],
+				grid: []
 			})
 			onMounted(() => {
 				methods.initAllData()
@@ -37,7 +42,8 @@
 					state.themeA = theme.getHomeLocationA()
 					state.themeE = theme.getHomeLocationE()
 					state.bannerB = await Banner.getHomeLocationB()
-					console.log(state.bannerB)
+					state.grid = await Category.getHomeLocationC()
+					console.log(state.grid)
 
 					if (state.themeE.online) {
 						const data = await Theme.getHomeLocationESpu()

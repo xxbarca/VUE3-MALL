@@ -1,0 +1,12 @@
+@import "../../common/style/common.scss";
+.item {
+    .grid-img{
+        width: rem(50px);
+        height: rem(50px);
+    }
+
+    .grid-title {
+        font-size: rem(25px);
+        color: black;
+    }
+}
