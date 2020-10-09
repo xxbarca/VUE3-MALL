@@ -16,7 +16,7 @@
 
 <script>
 	import {onMounted, reactive, ref, toRefs} from 'vue'
-	import {Categories} from "../../../models/Categories"
+	import {Categories} from "../../models/Categories"
 	import SubCategory from '../../components/sub-category'
 	export default {
 		name: "category",

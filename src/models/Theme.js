@@ -1,4 +1,4 @@
-import instance from '../utils/http'
+import instance from '../../utils/http'
 
 class Theme {
 	static locationA = 't-1'

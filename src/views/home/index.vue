@@ -13,12 +13,12 @@
 
 <script>
 	import {onMounted, reactive, toRefs} from 'vue'
-	import {Theme} from "../../../models/Theme"
-	import {Banner} from '../../../models/Banner'
+	import {Theme} from "../../models/Theme"
+	import {Banner} from '../../models/Banner'
 	import SpuScroll from '../../components/spu-scroll'
-	import {Category} from "../../../models/Category"
+	import {Category} from "../../models/Category"
 	import CategoryGrid from '../../components/category-grid'
-	import {Activity} from "../../../models/Activity"
+	import {Activity} from "../../models/Activity"
 	export default {
 		name: "home",
 		components: {

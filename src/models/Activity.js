@@ -1,4 +1,4 @@
-import instance from "../utils/http"
+import instance from "../../utils/http"
 
 class Activity {
 	static locationD = 'a-2'

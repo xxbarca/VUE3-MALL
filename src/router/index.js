@@ -24,7 +24,13 @@ const routes = [
 			component: () => import(/** My */'../views/my/index')
 		}],
 		component: Entry
+	},
+	{
+		path: '/detail/:pid',
+		name: 'Detail',
+		component: () => import(/** detail */'../views/detail/index')
 	}
+	
 
 ]
 

@@ -1,4 +1,4 @@
-import instance from "../utils/http"
+import instance from "../../utils/http"
 
 class Category {
 	static locationB = 'b-1'
