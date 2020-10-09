@@ -10,6 +10,8 @@
 
 <script>
 	import {onMounted, ref, reactive} from 'vue'
+	import {useStore} from 'vuex'
+	import * as types from '../../store/action-types'
 	import TabBar from '../../components/tabbar/index'
 	export default {
 		name: 'entry',
@@ -21,9 +23,11 @@
 			let style = reactive({
 				overflow: 'scroll'
 			})
+			const store = useStore()
 			onMounted(() => {
-				const {height} = entry.value.getBoundingClientRect()
-				style.height = `${document.body.clientHeight - 50 - 46}px`
+				const height = document.body.clientHeight - 50 - 46
+				style.height = `${height}px`
+				localStorage.setItem('height', height)
 			})
 			return {
 				entry,

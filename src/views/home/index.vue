@@ -6,7 +6,9 @@
 		</van-swipe-item>
 	</van-swipe>
 	<CategoryGrid :grid="grid" />
+	<img class="activity" @click="methods.onGoToCoupons('a-2')" :src="activityD.entrance_img">
 	<SpuScroll :theme="themeE" :spu-list="themeESpu" />
+	<img :src="themeF.entrance_img" class="quality" />
 </template>
 
 <script>
@@ -16,6 +18,7 @@
 	import SpuScroll from '../../components/spu-scroll'
 	import {Category} from "../../../models/Category"
 	import CategoryGrid from '../../components/category-grid'
+	import {Activity} from "../../../models/Activity"
 	export default {
 		name: "home",
 		components: {
@@ -25,10 +28,13 @@
 		setup() {
 			let state = reactive({
 				themeA: {},
+				themeF: {},
 				themeE: {},
 				themeESpu: [],
 				bannerB: [],
-				grid: []
+				bannerG: null,
+				grid: [],
+				activityD: []
 			})
 			onMounted(() => {
 				methods.initAllData()
@@ -42,8 +48,10 @@
 					state.themeA = theme.getHomeLocationA()
 					state.themeE = theme.getHomeLocationE()
 					state.bannerB = await Banner.getHomeLocationB()
+					state.bannerG = await Banner.getHomeLocationG()
 					state.grid = await Category.getHomeLocationC()
-					console.log(state.grid)
+					state.activityD = await Activity.getHomeLocationD()
+					state.themeF = theme.getHomeLocationF()
 
 					if (state.themeE.online) {
 						const data = await Theme.getHomeLocationESpu()
@@ -51,11 +59,15 @@
 							state.themeESpu = data.spu_list.slice(0, 8)
 						}
 					}
+				},
+				onGoToCoupons(name) {
+					console.log(name)
 				}
 			}
 
 			return {
-				...toRefs(state)
+				...toRefs(state),
+				methods
 			}
 		}
 	}
