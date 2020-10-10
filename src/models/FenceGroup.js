@@ -30,6 +30,15 @@ class FenceGroup {
 		return new Matrix(m)
 	}
 	
+	// 获取默认的sku
+	getDefaultSku() {
+		const defaultSkuId = this.spu.default_sku_id
+		if (!defaultSkuId) {
+			return
+		}
+		return this.skuList.find(s => s.id === defaultSkuId)
+	}
+	
 }
 export {
 	FenceGroup

@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<van-nav-bar title="商城"/>
-		<van-popup v-model:show="show" position="bottom" :style="{ height: '30%' }">
+		<van-popup v-model:show="show" position="bottom" :style="{ maxHeight: '500px', minHeight: '350px' }">
 			<Realm :spu="spu" />
 		</van-popup>
 	</div>
