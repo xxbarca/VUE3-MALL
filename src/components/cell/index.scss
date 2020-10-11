@@ -1,0 +1,38 @@
+.container {
+    border: 1px solid #333333;
+    padding: 1px;
+    height: 30px;
+    box-sizing: border-box;
+}
+
+.inner-container {
+    height: 100%;
+    padding-left: 8px;
+    padding-right: 8px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background: #ffffff;
+    font-size: 12px ;
+}
+
+.forbidden {
+    border: 1px dashed #bbbbbb;
+    color: #bbbbbb;
+}
+
+.s-outer {
+    border: 1px solid #157658;
+    color: #ffffff;
+}
+
+.s-inner {
+    background-color: #157658;
+}
+
+.img {
+    display: flex;
+    width: 22px;
+    height: 22px;
+    margin-right: 5px;
+}

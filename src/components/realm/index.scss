@@ -6,6 +6,13 @@
         margin-bottom: 50px;
         .inner-container {
             padding: 15px 15px 0 15px;
+
+            .hr {
+                margin-top: 15px;
+                width: 100%;
+                height: 1px;
+                background-color: #E9E9E9;
+            }
         }
         .sku-preview {
             display: flex;

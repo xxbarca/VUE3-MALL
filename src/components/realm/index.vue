@@ -17,8 +17,9 @@
 						</div>
 					</div>
 				</div>
+				<div class="hr"></div>
+				<Fence v-for="(item, index) in fences" :key="index" :x="index" :fence="item" />
 			</div>
-
 		</div>
 		<div v-if="!outStock" @click="onBuyOrCart" class="bottom-btn">
 			<span v-if="orderWay === 'cart'">加入购物车</span>
@@ -36,9 +37,13 @@
 	import {Spu} from "../../models/Spu"
 	import {FenceGroup} from "../../models/FenceGroup"
 	import {mainPrice, slashPrice} from '../../../utils/price'
+	import Fence from '../../components/fence'
 	export default {
 		name: "realm",
 		props: ['spu'],
+		components: {
+			Fence
+		},
 		setup(props) {
 			let previewImg = ref('')
 			let title = ref('')
@@ -49,6 +54,9 @@
 			let orderWay = ref('cart')
 			const root = ref(null)
 			const style = reactive({})
+			const state = reactive({
+				fences: []
+			})
 			watch(
 				() => props.spu,
 				(spu, preSpu) => {
@@ -66,6 +74,7 @@
 				// style.height = containerHeight
 			})
 
+
 			function processHasSpec(spu) {
 				const fenceGroup = new FenceGroup(spu)
 				fenceGroup.initFences()
@@ -75,6 +84,11 @@
 				} else {
 					bindSpuData()
 				}
+				bindFenceGroupData(fenceGroup)
+			}
+
+			function bindFenceGroupData(fenceGroup) {
+				state.fences = fenceGroup.fences
 			}
 
 			function bindSkuData(sku) {
@@ -100,6 +114,7 @@
 
 			return {
 				...toRefs(props),
+				...toRefs(state),
 				outStock,
 				orderWay,
 				root,
