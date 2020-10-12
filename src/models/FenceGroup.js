@@ -30,6 +30,19 @@ class FenceGroup {
 		return new Matrix(m)
 	}
 	
+	each(callback) {
+		for (let i = 0; i < this.fences.length; i++) {
+			for (let j = 0; j < this.fences[i].cells.length; j++) {
+				const cell = this.fences[i].cells[i]
+				callback(cell, i, j)
+			}
+		}
+	}
+	
+	setCellStatusByXY(x, y, status) {
+		this.fences[x].cells[y].status = status
+	}
+	
 	// 获取默认的sku
 	getDefaultSku() {
 		const defaultSkuId = this.spu.default_sku_id

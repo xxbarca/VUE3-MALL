@@ -1,4 +1,6 @@
 import {SkuCode} from "./SkuCode"
+import {CellTagStatus} from "../core/enum/CellTagStatus"
+import {SkuPending} from "./SkuPending"
 
 class Judger {
 	fenceGroup
@@ -8,6 +10,7 @@ class Judger {
 	constructor(fenceGroup) {
 		this.fenceGroup = fenceGroup
 		this._initPathDict()
+		this._initSkuPending()
 	}
 	
 	_initPathDict() {
@@ -17,8 +20,30 @@ class Judger {
 		})
 	}
 	
-	_initSkuPending() {
+	judge(cell, x, y, isInit = false) {
+		if (!isInit) {
+			this._changeCurrentCellStatus(cell, x, y)
+		}
+		this.fenceGroup.each((cell, x, y) => {
+		})
+	}
 	
+	_changeCurrentCellStatus(cell, x, y) {
+		if (cell.status === CellTagStatus.WAITING) {
+			this.fenceGroup.setCellStatusByXY(x, y, CellTagStatus.SELECTED)
+			this.skuPending.insertCell(cell, x)
+			return
+		}
+		if (cell.status === CellTagStatus.SELECTED) {
+			this.fenceGroup.setCellStatusByXY(x, y, CellTagStatus.WAITING)
+			this.skuPending.removeCell(x)
+			return
+		}
+	}
+	
+	_initSkuPending() {
+		const specsLength = this.fenceGroup.fences.length
+		this.skuPending = new SkuPending(specsLength)
 	}
 }
 

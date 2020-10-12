@@ -110,10 +110,11 @@
 
 			}
 
+
 			onMounted(() => {
-				bus.$on('cellTap', ({x, y, cell}) => [
-					console.log(x, y, cell)
-				])
+				bus.$on('cellTap', ({x, y, cell}) => {
+					state.judger.judge(cell, x, y)
+				})
 			})
 
 			return {
