@@ -1,5 +1,5 @@
 <template>
-	<div :class="['container', outer]">
+	<div @click="onTap" :class="['container', outer]">
 		<div :class="['inner-container', inner]">
 			<img :src="cell.skuImg" class="img" v-if="cell.skuImg" />
 			<span>{{cell.title}}</span>
@@ -9,10 +9,12 @@
 
 <script>
 	import {toRefs, computed} from 'vue'
+	import bus from '../../../utils/bus'
 	export default {
 		name: "index",
 		props: ['x', 'y', 'cell'],
 		setup(props, context) {
+
 			const outer = computed(() => {
 				if (props.cell.status === 'forbidden') {
 					return 'forbidden'
@@ -30,11 +32,17 @@
 				}
 			})
 
+			function onTap() {
+				bus.$emit('cellTap', {
+					...props
+				})
+			}
+
 			return {
 				...toRefs(props),
+				onTap,
 				inner,
 				outer,
-
 			}
 		}
 	}

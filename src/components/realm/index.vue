@@ -38,6 +38,9 @@
 	import {FenceGroup} from "../../models/FenceGroup"
 	import {mainPrice, slashPrice} from '../../../utils/price'
 	import Fence from '../../components/fence'
+	import bus from '../../../utils/bus'
+	import {Judger} from "../../models/Judge"
+
 	export default {
 		name: "realm",
 		props: ['spu'],
@@ -45,6 +48,7 @@
 			Fence
 		},
 		setup(props) {
+
 			let previewImg = ref('')
 			let title = ref('')
 			let price = ref('')
@@ -55,7 +59,8 @@
 			const root = ref(null)
 			const style = reactive({})
 			const state = reactive({
-				fences: []
+				fences: [],
+				judger: {}
 			})
 			watch(
 				() => props.spu,
@@ -68,16 +73,10 @@
 				}
 			)
 
-			onMounted(() => {
-				// console.log(root.value)
-				// const containerHeight = `${root.value.clientHeight - 50}px`
-				// style.height = containerHeight
-			})
-
-
 			function processHasSpec(spu) {
 				const fenceGroup = new FenceGroup(spu)
 				fenceGroup.initFences()
+				state.judger = new Judger(fenceGroup)
 				const defaultSku = fenceGroup.getDefaultSku()
 				if (defaultSku) {
 					bindSkuData(defaultSku)
@@ -93,7 +92,6 @@
 
 			function bindSkuData(sku) {
 				previewImg.value = sku.img
-				console.log(previewImg.value)
 				title.value = sku.title
 				price.value = sku.price
 				discountPrice.value = sku.discount_price
@@ -111,6 +109,12 @@
 			function onBuyOrCart() {
 
 			}
+
+			onMounted(() => {
+				bus.$on('cellTap', ({x, y, cell}) => [
+					console.log(x, y, cell)
+				])
+			})
 
 			return {
 				...toRefs(props),
