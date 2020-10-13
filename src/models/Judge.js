@@ -1,6 +1,7 @@
 import {SkuCode} from "./SkuCode"
 import {CellTagStatus} from "../core/enum/CellTagStatus"
 import {SkuPending} from "./SkuPending"
+import {Joiner} from "../../utils/joiner"
 
 class Judger {
 	fenceGroup
@@ -21,11 +22,59 @@ class Judger {
 	}
 	
 	judge(cell, x, y, isInit = false) {
+		// 是否初始化的时候调用
 		if (!isInit) {
+			// 用户不点击不存在 cell, x, y, 用户点击才需要调用
 			this._changeCurrentCellStatus(cell, x, y)
 		}
-		this.fenceGroup.each((cell, x, y) => {
+		this.fenceGroup.eachCell((cell, x, y) => {
+			const path = this._findPotentialPath(cell, x, y)
+			if (!path) {
+				return
+			}
+			const isIn = this._isInDict(path)
+			if (isIn) {
+				// this.fenceGroup.fences[x].cells[y].status = CellTagStatus.WAITING
+				this.fenceGroup.setCellStatusByXY(x, y, CellTagStatus.WAITING)
+			} else {
+				// this.fenceGroup.fences[x].cells[y].status = CellTagStatus.FORBIDDEN
+				this.fenceGroup.setCellStatusByXY(x, y, CellTagStatus.FORBIDDEN)
+			}
 		})
+	}
+	
+	_isInDict(path) {
+		return this.pathDict.includes(path)
+	}
+	
+	/**
+	 * 获取cell潜在路径
+	 * */
+	_findPotentialPath(cell, x, y) {
+		const joiner = new Joiner("#")
+		for (let i = 0; i < this.fenceGroup.fences.length; i++) {
+			const selected = this.skuPending.findSelectedCellByX(i)
+			if (x === i) {
+				// 是当前行 cell id 1-42
+				if (this.skuPending.isSelected(cell, x)) {
+					return
+				}
+				const cellCode = this._getCellCode(cell.spec)
+				joiner.join(cellCode)
+			} else {
+				// 非当前行
+				if (selected) {
+					// 有已选元素则添加, 否则什么也不做
+					const selectedCellCode = this._getCellCode(selected.spec)
+					joiner.join(selectedCellCode)
+				}
+			}
+		}
+		return joiner.getStr()
+	}
+	
+	_getCellCode(spec) {
+		return spec.key_id + '-' + spec.value_id
 	}
 	
 	_changeCurrentCellStatus(cell, x, y) {
