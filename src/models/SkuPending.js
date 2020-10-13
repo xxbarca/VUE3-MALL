@@ -1,3 +1,5 @@
+import {Cell} from "./Cell"
+
 class SkuPending {
 	size
 	pending = []
@@ -23,6 +25,13 @@ class SkuPending {
 			return false
 		}
 		return cell.id === pendingCell.id
+	}
+	init(sku) {
+		// this.size = sku.specs.length
+		for (let i = 0; i < sku.specs.length; i++) {
+			const cell = new Cell(sku.specs[i])
+			this.insertCell(cell, i)
+		}
 	}
 	
 }

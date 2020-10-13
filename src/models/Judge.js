@@ -93,6 +93,19 @@ class Judger {
 	_initSkuPending() {
 		const specsLength = this.fenceGroup.fences.length
 		this.skuPending = new SkuPending(specsLength)
+		const defaultSku = this.fenceGroup.getDefaultSku()
+		if (!defaultSku) {
+			return
+		}
+		this.skuPending.init(defaultSku)
+		this._initSelectedCell()
+		this.judge(null, null, null, true)
+	}
+	
+	_initSelectedCell() {
+		this.skuPending.pending.forEach(cell => {
+			this.fenceGroup.setCellStatusById(cell.id, CellTagStatus.SELECTED)
+		})
 	}
 }
 

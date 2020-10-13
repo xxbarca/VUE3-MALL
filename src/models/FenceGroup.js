@@ -39,6 +39,14 @@ class FenceGroup {
 		}
 	}
 	
+	setCellStatusById(cellId, status) {
+		this.eachCell((cell) => {
+			if (cell.id === cellId) {
+				cell.status = status
+			}
+		})
+	}
+	
 	setCellStatusByXY(x, y, status) {
 		this.fences[x].cells[y].status = status
 	}
