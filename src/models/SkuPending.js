@@ -33,7 +33,18 @@ class SkuPending {
 			this.insertCell(cell, i)
 		}
 	}
+	isIntact() {
+		for (let i = 0; i < this.size; i++) {
+			if (this._isEmptyPart(i)) {
+				return false
+			}
+		}
+		return true
+	}
 	
+	_isEmptyPart(index) {
+		return this.pending[index] ? false : true
+	}
 }
 
 export {

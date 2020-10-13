@@ -14,11 +14,22 @@
 								<span v-if="stock && stock >= 10" class="stock">库存: {{stock}} 件</span>
 								<span v-if="stock && stock < 10 && stock != 0" class="stock-pinch">仅剩: {{stock}} 件</span>
 							</div>
+							<div class="sku-pending">
+<!--							todo -->
+							</div>
 						</div>
 					</div>
 				</div>
 				<div class="hr"></div>
 				<Fence v-for="(item, index) in fences" :key="index" :x="index" :fence="item" />
+				<div class="counter-container">
+					<span>购买数量</span>
+					<van-stepper @change="onChange"
+								 :max="Cart.SKU_MAX_COUNT"
+								 :min="Cart.SKU_MIN_COUNT"
+								 v-model="Cart.SKU_MIN_COUNT" />
+				</div>
+
 			</div>
 		</div>
 		<div v-if="!outStock" @click="onBuyOrCart" class="bottom-btn">
@@ -40,6 +51,7 @@
 	import Fence from '../../components/fence'
 	import bus from '../../../utils/bus'
 	import {Judger} from "../../models/Judge"
+	import {Cart} from "../../models/Cart"
 
 	export default {
 		name: "realm",
@@ -56,6 +68,9 @@
 			let stock = ref(0)
 			let outStock = ref(false)
 			let orderWay = ref('cart')
+			let noSpec = ref(false)
+			let skuIntact = ref(false)
+			let currentSkuCount = ref(Cart.SKU_MIN_COUNT)
 			const root = ref(null)
 			const style = reactive({})
 			const state = reactive({
@@ -66,12 +81,22 @@
 				() => props.spu,
 				(spu, preSpu) => {
 					if (Spu.isNoSpec(spu)) { // => 无规格
-
+						processNoSpec(spu)
 					} else { // => 有规格
 						processHasSpec(spu)
 					}
 				}
 			)
+
+			function processNoSpec(spu) {
+				noSpec.value = true
+				bindSkuData(spu.sku_list[0])
+				setStockStatus(spu.sku_list[0].stock, currentSkuCount.value)
+			}
+
+			function onChange(value) {
+				console.log(value)
+			}
 
 			function processHasSpec(spu) {
 				const fenceGroup = new FenceGroup(spu)
@@ -80,6 +105,7 @@
 				const defaultSku = fenceGroup.getDefaultSku()
 				if (defaultSku) {
 					bindSkuData(defaultSku)
+					setStockStatus(defaultSku.stock, currentSkuCount.value)
 				} else {
 					bindSpuData()
 				}
@@ -96,6 +122,14 @@
 				price.value = sku.price
 				discountPrice.value = sku.discount_price
 				stock.value = sku.stock
+			}
+
+			function setStockStatus(stock, currentCount) {
+				outStock.value = isOutOfStock(stock, currentCount)
+			}
+
+			function isOutOfStock(stock, currentCount) {
+				return stock < currentCount
 			}
 
 			function bindSpuData() {
@@ -129,9 +163,12 @@
 				price,
 				discountPrice,
 				stock,
+				Cart,
+				skuIntact,
 				onBuyOrCart,
 				mainPrice,
-				slashPrice
+				slashPrice,
+				onChange
 			}
 		}
 	}
