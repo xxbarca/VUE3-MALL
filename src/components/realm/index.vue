@@ -158,6 +158,12 @@
 			onMounted(() => {
 				bus.$on('cellTap', ({x, y, cell}) => {
 					state.judger.judge(cell, x, y)
+					const isSkuIntact = state.judger.isSkuIntact()
+					if (isSkuIntact) {
+						const currentSku = state.judger.getDeterminateSku()
+
+						bindSkuData(currentSku)
+					}
 				})
 			})
 
