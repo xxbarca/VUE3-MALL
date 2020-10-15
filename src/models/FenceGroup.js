@@ -39,6 +39,12 @@ class FenceGroup {
 		}
 	}
 	
+	getSku(code) {
+		const fullSkuCode = `${this.spu.id}$${code}`
+		const sku = this.skuList.find(s => s.code = fullSkuCode)
+		return sku ? sku : null
+	}
+	
 	setCellStatusById(cellId, status) {
 		this.eachCell((cell) => {
 			if (cell.id === cellId) {

@@ -24,7 +24,7 @@
 				<Fence v-for="(item, index) in fences" :key="index" :x="index" :fence="item" />
 				<div class="counter-container">
 					<span>购买数量</span>
-					<van-stepper @change="onChange"
+					<van-stepper @change="onSelectCount"
 								 :max="Cart.SKU_MAX_COUNT"
 								 :min="Cart.SKU_MIN_COUNT"
 								 v-model="Cart.SKU_MIN_COUNT" />
@@ -94,8 +94,16 @@
 				setStockStatus(spu.sku_list[0].stock, currentSkuCount.value)
 			}
 
-			function onChange(value) {
-				console.log(value)
+			function onSelectCount(value) {
+				currentSkuCount.value = value
+				if (Spu.isNoSpec(props.spu)) {
+					// TODO
+				} else {
+					if (state.judger.isSkuIntact()) {
+						const sku = state.judger.getDeterminateSku()
+						setStockStatus(sku.stock, currentSkuCount.value)
+					}
+				}
 			}
 
 			function processHasSpec(spu) {
@@ -123,6 +131,8 @@
 				discountPrice.value = sku.discount_price
 				stock.value = sku.stock
 			}
+
+
 
 			function setStockStatus(stock, currentCount) {
 				outStock.value = isOutOfStock(stock, currentCount)
@@ -168,7 +178,7 @@
 				onBuyOrCart,
 				mainPrice,
 				slashPrice,
-				onChange
+				onSelectCount
 			}
 		}
 	}
